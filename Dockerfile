@@ -2,23 +2,25 @@ FROM node:18 as builder
 
 WORKDIR /calcom
 
-ARG NEXT_PUBLIC_LICENSE_CONSENT
-ARG CALCOM_TELEMETRY_DISABLED
-ARG DATABASE_URL
+# Hardcoded environment variables
+ARG NEXT_PUBLIC_LICENSE_CONSENT=agree
+ARG CALCOM_TELEMETRY_DISABLED=1
+ARG DATABASE_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
 ARG NEXTAUTH_SECRET=secret
 ARG CALENDSO_ENCRYPTION_KEY=secret
 ARG MAX_OLD_SPACE_SIZE=4096
-ARG NEXT_PUBLIC_API_V2_URL
+ARG NEXT_PUBLIC_API_V2_URL=http://localhost:5555/api/v2
 
-ENV NEXT_PUBLIC_WEBAPP_URL=http://NEXT_PUBLIC_WEBAPP_URL_PLACEHOLDER \
+# Set environment variables with hardcoded values
+ENV NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000 \
     NEXT_PUBLIC_API_V2_URL=$NEXT_PUBLIC_API_V2_URL \
     NEXT_PUBLIC_LICENSE_CONSENT=$NEXT_PUBLIC_LICENSE_CONSENT \
     CALCOM_TELEMETRY_DISABLED=$CALCOM_TELEMETRY_DISABLED \
     DATABASE_URL=$DATABASE_URL \
     DATABASE_DIRECT_URL=$DATABASE_URL \
-    NEXTAUTH_SECRET=${NEXTAUTH_SECRET} \
-    CALENDSO_ENCRYPTION_KEY=${CALENDSO_ENCRYPTION_KEY} \
-    NODE_OPTIONS=--max-old-space-size=${MAX_OLD_SPACE_SIZE} \
+    NEXTAUTH_SECRET=$NEXTAUTH_SECRET \
+    CALENDSO_ENCRYPTION_KEY=$CALENDSO_ENCRYPTION_KEY \
+    NODE_OPTIONS=--max-old-space-size=$MAX_OLD_SPACE_SIZE \
     BUILD_STANDALONE=true
 
 COPY calcom/package.json calcom/yarn.lock calcom/.yarnrc.yml calcom/playwright.config.ts calcom/turbo.json calcom/git-init.sh calcom/git-setup.sh ./
@@ -37,8 +39,6 @@ RUN yarn --cwd packages/prisma seed-app-store
 RUN yarn --cwd packages/embeds/embed-core workspace @calcom/embed-core run build
 RUN yarn --cwd apps/web workspace @calcom/web run build
 
-# RUN yarn plugin import workspace-tools && \
-#     yarn workspaces focus --all --production
 RUN rm -rf node_modules/.cache .yarn/cache apps/web/.next/cache
 
 FROM node:18 as builder-two
@@ -57,15 +57,12 @@ COPY --from=builder /calcom/apps/web ./apps/web
 COPY --from=builder /calcom/packages/prisma/schema.prisma ./prisma/schema.prisma
 COPY scripts scripts
 
-# Save value used during this build stage. If NEXT_PUBLIC_WEBAPP_URL and BUILT_NEXT_PUBLIC_WEBAPP_URL differ at
-# run-time, then start.sh will find/replace static values again.
 ENV NEXT_PUBLIC_WEBAPP_URL=$NEXT_PUBLIC_WEBAPP_URL \
     BUILT_NEXT_PUBLIC_WEBAPP_URL=$NEXT_PUBLIC_WEBAPP_URL
 
 RUN scripts/replace-placeholder.sh http://NEXT_PUBLIC_WEBAPP_URL_PLACEHOLDER ${NEXT_PUBLIC_WEBAPP_URL}
 
 FROM node:18 as runner
-
 
 WORKDIR /calcom
 COPY --from=builder-two /calcom ./

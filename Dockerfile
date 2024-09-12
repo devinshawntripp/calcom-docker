@@ -13,13 +13,13 @@ ARG NEXT_PUBLIC_API_V2_URL=http://localhost:5555/api/v2
 
 # Set environment variables with hardcoded values
 ENV NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000 \
-    NEXT_PUBLIC_API_V2_URL=$NEXT_PUBLIC_API_V2_URL \
-    NEXT_PUBLIC_LICENSE_CONSENT=$NEXT_PUBLIC_LICENSE_CONSENT \
-    CALCOM_TELEMETRY_DISABLED=$CALCOM_TELEMETRY_DISABLED \
-    DATABASE_URL=$DATABASE_URL \
-    DATABASE_DIRECT_URL=$DATABASE_URL \
-    NEXTAUTH_SECRET=$NEXTAUTH_SECRET \
-    CALENDSO_ENCRYPTION_KEY=$CALENDSO_ENCRYPTION_KEY \
+    NEXT_PUBLIC_API_V2_URL=http://localhost:5555/api/v2 \
+    NEXT_PUBLIC_LICENSE_CONSENT=agree \
+    CALCOM_TELEMETRY_DISABLED=1 \
+    DATABASE_URL=postgresql://unicorn_user:magical_password@database:5432/calendso \
+    DATABASE_DIRECT_URL=postgresql://unicorn_user:magical_password@database:5432/calendso \
+    NEXTAUTH_SECRET=secret \
+    CALENDSO_ENCRYPTION_KEY=secret \
     NODE_OPTIONS=--max-old-space-size=$MAX_OLD_SPACE_SIZE \
     BUILD_STANDALONE=true
 

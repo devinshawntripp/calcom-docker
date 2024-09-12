@@ -19,9 +19,9 @@ services:
     networks:
       - stack
     environment:
-      - POSTGRES_USER=unicorn_user
-      - POSTGRES_PASSWORD=magical_password
-      - POSTGRES_DB=calendso
+      POSTGRES_USER: unicorn_user
+      POSTGRES_PASSWORD: magical_password
+      POSTGRES_DB: calendso
 
   calcom:
     image: calcom.docker.scarf.sh/calcom/cal.com
@@ -29,14 +29,14 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000
-        NEXT_PUBLIC_API_V2_URL=http://localhost:5555/api/v2
-        NEXT_PUBLIC_LICENSE_CONSENT=agree
-        CALCOM_TELEMETRY_DISABLED=1
-        NEXTAUTH_SECRET=secret
-        CALENDSO_ENCRYPTION_KEY=secret
-        DATABASE_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
-        DATABASE_DIRECT_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
+        NEXT_PUBLIC_WEBAPP_URL: http://localhost:4000
+        NEXT_PUBLIC_API_V2_URL: http://localhost:5555/api/v2
+        NEXT_PUBLIC_LICENSE_CONSENT: agree
+        CALCOM_TELEMETRY_DISABLED: "1"
+        NEXTAUTH_SECRET: secret
+        CALENDSO_ENCRYPTION_KEY: secret
+        DATABASE_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
+        DATABASE_DIRECT_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
     restart: always
     networks:
       - stack
@@ -44,14 +44,14 @@ services:
       - 4000:3000
     env_file: ".env"
     environment:
-      - DATABASE_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
-      - DATABASE_DIRECT_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
-      - NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000
-      - NEXT_PUBLIC_API_V2_URL=http://localhost:5555/api/v2
-      - NEXT_PUBLIC_LICENSE_CONSENT=agree
-      - CALCOM_TELEMETRY_DISABLED=1
-      - NEXTAUTH_SECRET=secret
-      - CALENDSO_ENCRYPTION_KEY=secret
+      DATABASE_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
+      DATABASE_DIRECT_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
+      NEXT_PUBLIC_WEBAPP_URL: http://localhost:4000
+      NEXT_PUBLIC_API_V2_URL: http://localhost:5555/api/v2
+      NEXT_PUBLIC_LICENSE_CONSENT: agree
+      CALCOM_TELEMETRY_DISABLED: "1"
+      NEXTAUTH_SECRET: secret
+      CALENDSO_ENCRYPTION_KEY: secret
     depends_on:
       - database
 
@@ -64,11 +64,11 @@ services:
       - 5555:5555
     env_file: ".env"
     environment:
-      - DATABASE_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
-      - DATABASE_DIRECT_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
-      - NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000
-      - NEXT_PUBLIC_API_V2_URL=http://localhost:5555/api/v2
-      - NEXTAUTH_SECRET=secret
+      DATABASE_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
+      DATABASE_DIRECT_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
+      NEXT_PUBLIC_WEBAPP_URL: http://localhost:4000
+      NEXT_PUBLIC_API_V2_URL: http://localhost:5555/api/v2
+      NEXTAUTH_SECRET: secret
     depends_on:
       - database
     command:

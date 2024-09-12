@@ -22,6 +22,11 @@ services:
       POSTGRES_USER: unicorn_user
       POSTGRES_PASSWORD: magical_password
       POSTGRES_DB: calendso
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   calcom:
     image: calcom.docker.scarf.sh/calcom/cal.com
@@ -53,7 +58,8 @@ services:
       NEXTAUTH_SECRET: secret
       CALENDSO_ENCRYPTION_KEY: secret
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   studio:
     image: calcom.docker.scarf.sh/calcom/cal.com
@@ -70,7 +76,8 @@ services:
       NEXT_PUBLIC_API_V2_URL: http://localhost:5555/api/v2
       NEXTAUTH_SECRET: secret
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     command:
       - npx
       - prisma

@@ -15,7 +15,7 @@ services:
     restart: always
     volumes:
       - database-data:/var/lib/postgresql/data/
-    env_file: ".env"
+    env_file: .env
     networks:
       - stack
     environment:
@@ -42,7 +42,7 @@ services:
       - stack
     ports:
       - 4000:3000
-    env_file: ".env"
+    env_file: .env
     environment:
       DATABASE_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
       DATABASE_DIRECT_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
@@ -62,7 +62,7 @@ services:
       - stack
     ports:
       - 5555:5555
-    env_file: ".env"
+    env_file: .env
     environment:
       DATABASE_URL: postgresql://unicorn_user:magical_password@database:5432/calendso
       DATABASE_DIRECT_URL: postgresql://unicorn_user:magical_password@database:5432/calendso

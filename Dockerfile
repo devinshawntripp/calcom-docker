@@ -20,7 +20,7 @@ ENV NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000 \
     DATABASE_DIRECT_URL=postgresql://unicorn_user:magical_password@database:5432/calendso \
     NEXTAUTH_SECRET=secret \
     CALENDSO_ENCRYPTION_KEY=secret \
-    NODE_OPTIONS=--max-old-space-size=$MAX_OLD_SPACE_SIZE \
+    ENV NEXT_TELEMETRY_DISABLED=1 \
     BUILD_STANDALONE=true
 
 COPY calcom/package.json calcom/yarn.lock calcom/.yarnrc.yml calcom/playwright.config.ts calcom/turbo.json calcom/git-init.sh calcom/git-setup.sh ./

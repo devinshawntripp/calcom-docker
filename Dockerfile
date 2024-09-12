@@ -37,7 +37,7 @@ RUN yarn install
 # RUN yarn --cwd packages/prisma seed-app-store
 # Build and make embed servable from web/public/embed folder
 # RUN yarn --cwd packages/embeds/embed-core workspace @calcom/embed-core run build
-RUN yarn --cwd apps/web workspace @calcom/web run build --verbose
+RUN yarn --cwd apps/web workspace @calcom/web run build
 
 RUN rm -rf node_modules/.cache .yarn/cache apps/web/.next/cache
 

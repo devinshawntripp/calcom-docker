@@ -8,7 +8,7 @@ ARG CALCOM_TELEMETRY_DISABLED=1
 ARG DATABASE_URL=postgresql://unicorn_user:magical_password@database:5432/calendso
 ARG NEXTAUTH_SECRET=secret
 ARG CALENDSO_ENCRYPTION_KEY=secret
-ARG MAX_OLD_SPACE_SIZE=4096
+ARG MAX_OLD_SPACE_SIZE=8192
 ARG NEXT_PUBLIC_API_V2_URL=http://localhost:5555/api/v2
 
 # Set environment variables with hardcoded values
@@ -37,7 +37,7 @@ RUN yarn install
 # RUN yarn --cwd packages/prisma seed-app-store
 # Build and make embed servable from web/public/embed folder
 # RUN yarn --cwd packages/embeds/embed-core workspace @calcom/embed-core run build
-RUN yarn --cwd apps/web workspace @calcom/web run build
+RUN yarn --cwd apps/web workspace @calcom/web run build --verbose
 
 RUN rm -rf node_modules/.cache .yarn/cache apps/web/.next/cache
 

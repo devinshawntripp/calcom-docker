@@ -33,7 +33,7 @@ COPY calcom/tests ./tests
 RUN yarn config set httpTimeout 1200000
 RUN npx turbo prune --scope=@calcom/web --docker
 RUN yarn install
-RUN yarn db-deploy
+# RUN yarn db-deploy
 RUN yarn --cwd packages/prisma seed-app-store
 # Build and make embed servable from web/public/embed folder
 RUN yarn --cwd packages/embeds/embed-core workspace @calcom/embed-core run build
@@ -44,7 +44,7 @@ RUN rm -rf node_modules/.cache .yarn/cache apps/web/.next/cache
 FROM node:18 as builder-two
 
 WORKDIR /calcom
-ARG NEXT_PUBLIC_WEBAPP_URL=http://localhost:3000
+ARG NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000
 
 ENV NODE_ENV production
 
@@ -66,14 +66,14 @@ FROM node:18 as runner
 
 WORKDIR /calcom
 COPY --from=builder-two /calcom ./
-ARG NEXT_PUBLIC_WEBAPP_URL=http://localhost:3000
+ARG NEXT_PUBLIC_WEBAPP_URL=http://localhost:4000
 ENV NEXT_PUBLIC_WEBAPP_URL=$NEXT_PUBLIC_WEBAPP_URL \
     BUILT_NEXT_PUBLIC_WEBAPP_URL=$NEXT_PUBLIC_WEBAPP_URL
 
 ENV NODE_ENV production
-EXPOSE 3000
+EXPOSE 4000
 
 HEALTHCHECK --interval=30s --timeout=30s --retries=5 \
-    CMD wget --spider http://localhost:3000 || exit 1
+    CMD wget --spider http://localhost:4000 || exit 1
 
 CMD ["/calcom/scripts/start.sh"]
